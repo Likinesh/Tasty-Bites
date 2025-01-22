@@ -37,3 +37,25 @@ export const user_login = async (req, res) => {
         return res.status(500).json({ message: "Internal Server Error" });
     }
 };
+
+export const getAllusers = async(req,res)=>{
+    try {
+        const vendors = await R_user.find().populate('restaurents');
+        return res.status(200).json({vendors});
+    } catch (error) {
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
+export const getuserByID = async(req,res)=>{
+    const id = req.params.id;
+    try {
+        const vendor = await R_user.findById(id).populate('restaurents');
+        if(!vendor){
+            return res.status(404).json({ error: "Vendor Not Found" });
+        }
+        res.status(200).json({vendor});
+    } catch (error) {
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+}

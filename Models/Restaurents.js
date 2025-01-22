@@ -29,6 +29,10 @@ const restaurent_schema = new mongoose.Schema({
     user:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:'R_user'
+    }],
+    product:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'products'
     }]
 });
 

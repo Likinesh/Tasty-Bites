@@ -1,6 +1,7 @@
 import R_user from "../Models/Restaurent_User.js";
 import restaurents from "../Models/Restaurents.js";
 import multer from "multer";
+import path from 'path'
 
 // using multer to save images
 const storage = multer.diskStorage({
@@ -8,7 +9,7 @@ const storage = multer.diskStorage({
         cb(null,'images/');
     },
     filename:function(req,file,cb){
-        cb(null,Date.now()+'-'+file.originalname);
+        cb(null,Date.now()+path.extname( file.originalname));
     }
 });
 
@@ -44,4 +45,17 @@ const add_restaurent = async (req, res) => {
     }
 };
 
-export default { add_restaurent: [ upload.single('image'),add_restaurent]}
+const deleteById = async(req,res)=>{
+    const id = req.params.id;
+    try {
+        const deleteProd = await restaurents.findByIdAndDelete(id);
+        if(!deleteProd){
+            return res.status(404).json({error:'No Restaurent Found'});
+        }
+    } catch (error) {
+        console.error(err);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+}
+
+export default { add_restaurent: [ upload.single('image'),add_restaurent],deleteById}
